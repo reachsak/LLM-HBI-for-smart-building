@@ -25,7 +25,7 @@ This project involves designing and implementing a large language model-based ch
 - Python 3.x
 - Open-source Text-to-Speech (TTS) model
 - Open-source Speech-to-Text (STT) model
-- Large language model (e.g., GPT-based)
+- Open-source Large language model (e.g., LLaMA)
 
 ### Installation
 
