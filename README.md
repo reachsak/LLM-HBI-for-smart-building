@@ -1,7 +1,5 @@
 # Large Language Model for Human-Building Interaction
 
-**Date:** January 2024 – Present  
-**Institution:** Virginia Polytechnic Institute and State University
 
 ## Demo
 
