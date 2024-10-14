@@ -10,6 +10,10 @@
 
 This project involves designing and implementing a large language model-based chatbot/AI agents to facilitate natural language interactions between building occupants and facility management systems. The goal is to enhance smart facilities control through natural language processing, utilizing open-source Text-to-Speech (TTS) and Speech-to-Text (STT) models.
 
+## Manuscript
+Under preparation...
+
+
 ### Key Features
 
 - **Large Language Model-Based Chatbot:** Enables natural language interactions with building management systems.
