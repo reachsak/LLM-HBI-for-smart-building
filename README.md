@@ -29,10 +29,6 @@ Under preparation...
 - Open-source Speech-to-Text (STT) model
 - Open-source Large language model (e.g., LLaMA)
 
-### Installation
-
-*Coming soon...*
-
 ## Contributing
 
 Contributions are welcome! Please read the `CONTRIBUTING.md` file for details on how to contribute to this project.
