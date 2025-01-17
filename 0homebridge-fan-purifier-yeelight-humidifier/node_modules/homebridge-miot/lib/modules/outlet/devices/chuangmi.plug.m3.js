@@ -1,0 +1,70 @@
+const OutletDevice = require('../OutletDevice.js');
+const Constants = require('../../../constants/Constants.js');
+const PropFormat = require('../../../constants/PropFormat.js');
+const PropUnit = require('../../../constants/PropUnit.js');
+const PropAccess = require('../../../constants/PropAccess.js');
+
+
+class ChuangmiPlugM3 extends OutletDevice {
+  constructor(miotDevice, name, logger) {
+    super(miotDevice, name, logger);
+  }
+
+
+  /*----------========== DEVICE INFO ==========----------*/
+
+  getDeviceName() {
+    return 'Xiaomi Chuangmi Plug M3';
+  }
+
+  getMiotSpecUrl() {
+    return 'https://miot-spec.org/miot-spec-v2/instance?type=urn:miot-spec-v2:device:outlet:0000A002:chuangmi-m3:1';
+  }
+
+
+  /*----------========== CONFIG ==========----------*/
+
+  requiresMiCloud() {
+    return false;
+  }
+
+
+  /*----------========== METADATA ==========----------*/
+
+  initDeviceServices() {
+    this.createServiceByString('{"siid":2,"type":"urn:miot-spec-v2:service:switch:0000780C:chuangmi-m3:1","description":"Switch"}');
+    //this.createServiceByString('{"siid":3,"type":"urn:miot-spec-v2:service:indicator-light:00007803:chuangmi-m3:1","description":"Indicator Light"}');
+  }
+
+  initDeviceProperties() {
+    this.addPropertyByString('switch:on', '{"siid":2,"piid":1,"type":"urn:miot-spec-v2:property:on:00000006:chuangmi-m3:1","description":"Switch Status","format":"bool","access":["read","write","notify"]}');
+    //seems to cause issues so disable for now
+    //this.addPropertyByString('switch:temperature', '{"siid":2,"piid":2,"type":"urn:miot-spec-v2:property:temperature:00000020:chuangmi-m3:1","description":"Temperature","format":"float","access":["read","notify"],"unit":"celsius","valueRange":[0,100,1]}');
+    //also this device doesn't support customize the indicator light
+    //this.addPropertyByString('indicator-light:on', '{"siid":3,"piid":1,"type":"urn:miot-spec-v2:property:on:00000006:chuangmi-m3:1","description":"Switch Status","format":"bool","access":["read","write"]}');
+  }
+
+  initDeviceActions() {
+    //no actions
+  }
+
+  initDeviceEvents() {
+    //no events
+  }
+
+
+  /*----------========== VALUES OVERRIDES ==========----------*/
+
+
+  /*----------========== PROPERTY OVERRIDES ==========----------*/
+
+
+  /*----------========== ACTION OVERRIDES ==========----------*/
+
+
+  /*----------========== OVERRIDES ==========----------*/
+
+
+}
+
+module.exports = ChuangmiPlugM3;

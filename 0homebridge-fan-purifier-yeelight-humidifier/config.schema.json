@@ -1,0 +1,860 @@
+{
+  "pluginAlias": "miot",
+  "pluginType": "platform",
+  "singular": true,
+  "customUi": true,
+  "headerDisplay": "Homebridge plugin for devices using the miot protocol",
+  "footerDisplay": "For a detailed description, see the [README](https://github.com/merdok/homebridge-miot#platform-configuration-fields)",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "micloud": {
+        "title": "Global MiCloud connection",
+        "type": "object",
+        "properties": {
+          "username": {
+            "title": "Username",
+            "type": "string"
+          },
+          "password": {
+            "title": "Password",
+            "type": "string"
+          },
+          "country": {
+            "title": "Country",
+            "type": "string",
+            "enum": [
+              "cn",
+              "de",
+              "sg",
+              "tw",
+              "us",
+              "ru",
+              "in",
+              "i2"
+            ]
+          },
+          "forceMiCloud": {
+            "title": "Force MiCloud connection",
+            "description": "Use MiCloud instead of local connection even for devices that do not require it.",
+            "type": "boolean",
+            "required": false
+          },
+          "timeout": {
+            "title": "Request timeout",
+            "description": "Request timeout in milliseconds. Has to be less or equal to the pollingInterval.",
+            "type": "number",
+            "required": false
+          }
+        },
+        "required": false,
+        "dependencies": {
+          "username": [
+            "country"
+          ],
+          "password": [
+            "country"
+          ]
+        }
+      },
+      "devices": {
+        "title": "Devices",
+        "type": "array",
+        "required": true,
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "title": "Name",
+              "description": "The name of the device.",
+              "type": "string",
+              "default": "Miot device",
+              "minLength": 1,
+              "required": true
+            },
+            "ip": {
+              "title": "Device ip address",
+              "description": "The ip address of the device.",
+              "type": "string",
+              "format": "ipv4",
+              "required": true
+            },
+            "token": {
+              "title": "Device token",
+              "description": "The token of the device.",
+              "type": "string",
+              "required": true
+            },
+            "deviceId": {
+              "title": "Device id",
+              "description": "The unique device id of the device. Required for MiCloud devices.",
+              "type": "string",
+              "required": false
+            },
+            "model": {
+              "title": "The device model",
+              "description": "The model of the device. Should only be specified when certain about the device model. If specified then the accessory will be created instantly without the need to first discover and identify the device.",
+              "type": "string",
+              "required": false
+            },
+            "prefsDir": {
+              "title": "Prefs directory",
+              "description": "The location where to store device information. Default is: ~/.homebridge/.xiaomiMiot",
+              "type": "string",
+              "required": false
+            },
+            "pollingInterval": {
+              "title": "Background polling interval",
+              "description": "How often to check the status of the device in seconds.",
+              "type": "number",
+              "default": 10,
+              "required": false
+            },
+            "propertyChunkSize": {
+              "title": "Property sync chunk size",
+              "description": "Size of a property chunk when syncing properties with the device. A lower value might reduce the load on the device. Range 1-14.",
+              "type": "number",
+              "required": false
+            },
+            "deepDebugLog": {
+              "title": "Enable deep debug log",
+              "description": "Enables additional more detailed debug log. Useful when trying to figure out issues with the plugin.",
+              "type": "boolean",
+              "default": false
+            },
+            "silentLog": {
+              "title": "Enable silent log",
+              "description": "When enabled all log output will only appear in debug mode.",
+              "type": "boolean"
+            },
+            "micloud": {
+              "title": "MiCloud connection",
+              "type": "object",
+              "properties": {
+                "username": {
+                  "title": "Username",
+                  "type": "string"
+                },
+                "password": {
+                  "title": "Password",
+                  "type": "string"
+                },
+                "country": {
+                  "title": "Country",
+                  "type": "string",
+                  "enum": [
+                    "cn",
+                    "de",
+                    "sg",
+                    "tw",
+                    "us",
+                    "ru",
+                    "in",
+                    "i2"
+                  ]
+                },
+                "forceMiCloud": {
+                  "title": "Force MiCloud connection",
+                  "description": "Use MiCloud instead of local connection even for devices that do not require it.",
+                  "type": "boolean",
+                  "required": false
+                },
+                "timeout": {
+                  "title": "Request timeout",
+                  "description": "Request timeout in milliseconds. Has to be less or equal to the pollingInterval.",
+                  "type": "number",
+                  "required": false
+                }
+              },
+              "required": false,
+              "dependencies": {
+                "username": [
+                  "country"
+                ],
+                "password": [
+                  "country"
+                ]
+              }
+            },
+            "customAccessory": {
+              "title": "Use custom accessory",
+              "description": "Creates a custom empty accessory for the device which can be manually populated with services. Requires actionButtons, propertyControl or propertyMonitor to be set.",
+              "type": "boolean",
+              "required": false
+            },
+            "onlyMainService": {
+              "title": "Show only the main accessory service",
+              "description": "Only the main accessory service will be created without any additional services. Useful when wanting to have a clean layout. actionButtons, propertyControl or propertyMonitor can be used to manually add services.",
+              "type": "boolean",
+              "required": false
+            },
+            "buzzerControl": {
+              "title": "Buzzer control service",
+              "description": "Whether to show buzzer control buttons.",
+              "type": "boolean",
+              "default": true,
+              "required": false
+            },
+            "ledControl": {
+              "title": "Led control service",
+              "description": "Whether to show led control buttons.",
+              "type": "boolean",
+              "default": true,
+              "required": false
+            },
+            "childLockControl": {
+              "title": "Child lock control service",
+              "description": "Whether the child lock control service is enabled.",
+              "type": "boolean",
+              "default": true,
+              "required": false
+            },
+            "modeControl": {
+              "title": "Mode control service",
+              "description": "Show mode switches which allow to change the device mode.",
+              "type": "boolean",
+              "default": true,
+              "required": false
+            },
+            "suppressAutoServiceCreation": {
+              "title": "Suppress auto service creation",
+              "description": "Suppress auto creation of some sensor services.",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "uniqueItems": true,
+                "enum": [
+                  "temperature",
+                  "relativeHumidity",
+                  "illumination"
+                ]
+              },
+              "required": false
+            },
+            "actionButtons": {
+              "title": "Action buttons",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "action": {
+                    "title": "action",
+                    "type": "string",
+                    "required": true
+                  },
+                  "name": {
+                    "title": "name",
+                    "type": "string",
+                    "required": false
+                  },
+                  "params": {
+                    "title": "params",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "required": false
+                  }
+                }
+              },
+              "required": false
+            },
+            "methodButtons": {
+              "title": "Method buttons",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "method": {
+                    "title": "method",
+                    "type": "string",
+                    "required": true
+                  },
+                  "name": {
+                    "title": "name",
+                    "type": "string",
+                    "required": false
+                  },
+                  "params": {
+                    "title": "params",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "required": false
+                  }
+                }
+              },
+              "required": false
+            },
+            "propertyControl": {
+              "title": "Property control",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "property": {
+                    "title": "property",
+                    "type": "string",
+                    "required": true
+                  },
+                  "name": {
+                    "title": "name",
+                    "type": "string",
+                    "required": false
+                  },
+                  "value": {
+                    "title": "value",
+                    "type": "string",
+                    "required": false
+                  },
+                  "linkedProperty": {
+                    "title": "linked property",
+                    "type": "string",
+                    "required": false
+                  },
+                  "linkedPropertyValue": {
+                    "title": "linked property value",
+                    "type": "string",
+                    "required": false
+                  },
+                  "config": {
+                    "title": "config",
+                    "type": "object",
+                    "required": false
+                  }
+                }
+              },
+              "required": false
+            },
+            "propertyMonitor": {
+              "title": "Property monitor",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "property": {
+                    "title": "property",
+                    "type": "string",
+                    "required": true
+                  },
+                  "name": {
+                    "title": "name",
+                    "type": "string",
+                    "required": false
+                  },
+                  "value": {
+                    "title": "value",
+                    "type": "string",
+                    "required": false
+                  },
+                  "valueOperator": {
+                    "title": "value operator",
+                    "type": "string",
+                    "enum": [
+                      "equal",
+                      "less",
+                      "greater",
+                      "lessOrEqual",
+                      "greaterOrEqual"
+                    ],
+                    "required": false
+                  },
+                  "linkedProperty": {
+                    "title": "linked property",
+                    "type": "string",
+                    "required": false
+                  },
+                  "linkedPropertyValue": {
+                    "title": "linked property value",
+                    "type": "string",
+                    "required": false
+                  }
+                }
+              },
+              "required": false
+            },
+            "swingControl": {
+              "title": "Swing control service",
+              "description": "Show a switch to quickly enable/disable horizontal and/or vertical swing mode.",
+              "type": "boolean",
+              "required": false
+            },
+            "moveControl": {
+              "title": "Move control service",
+              "description": "Whether to show switches which allows to move the fan left, right, up or down.",
+              "type": "boolean",
+              "required": false
+            },
+            "fanLevelControl": {
+              "title": "Fan level service",
+              "description": "Show fan level switches which allow to change the fan level.",
+              "type": "boolean",
+              "required": false
+            },
+            "ioniserControl": {
+              "title": "Ioniser control service",
+              "description": "Show a switch which allows to quickly enable/disable the ioniser on your fan.",
+              "type": "boolean",
+              "required": false
+            },
+            "offDelayControl": {
+              "title": "Off delay control service",
+              "description": "Show a slider (light bulb) to control the auto shutdown timer.",
+              "type": "boolean",
+              "required": false
+            },
+            "horizontalAngleButtons": {
+              "title": "Horizontal angle buttons",
+              "description": "Allows to create buttons that can switch between horizontal oscillation angles.",
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 360
+              }
+            },
+            "verticalAngleButtons": {
+              "title": "Vertical angle buttons",
+              "description": "Allows to create buttons that can switch between vertical oscillation angles.",
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 360
+              }
+            },
+            "heatLevelControl": {
+              "title": "Heat level service",
+              "description": "Show heat level switches which allow to change the heat level.",
+              "type": "boolean",
+              "required": false
+            },
+            "screenControl": {
+              "title": "Screen control service",
+              "description": "Whether to show led control buttons.",
+              "type": "boolean",
+              "required": false
+            },
+            "motorControl": {
+              "title": "Motor control service",
+              "description": "Show motor control switches which allow to control the curtains.",
+              "type": "boolean",
+              "required": false
+            },
+            "heaterControl": {
+              "title": "Heater control service",
+              "description": "Show a switch which allows to quickly enable the heater.",
+              "type": "boolean",
+              "required": false
+            },
+            "pm25Breakpoints": {
+              "title": "Pm25 breakpoints",
+              "description": "Define a custom array of pm25 breakpoints. Provide an array with exactly 4 unique numbers.",
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minItems": 4,
+                "maxItems": 4,
+                "uniqueItems": true
+              },
+              "required": false
+            },
+            "co2AbnormalThreshold": {
+              "title": "Carbon Dioxide abnormal threshold",
+              "description": "Define a custom carbon dioxide sensor abnormal threshold.",
+              "type": "integer",
+              "required": false
+            },
+            "showTemperature": {
+              "title": "Show temperature",
+              "description": "Show temperature if the outlet supports temperature reporting.",
+              "type": "boolean",
+              "required": false
+            },
+            "foodAmount": {
+              "title": "Food amount",
+              "description": "The amount of food to dispense.",
+              "type": "integer",
+              "minimum": 1,
+              "required": false
+            }
+          }
+        }
+      }
+    }
+  },
+  "layout": [{
+      "type": "fieldset",
+      "title": "Global MiCloud Settings",
+      "description": "Configure global MiCloud connection details used for all devices.",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        "micloud.username",
+        "micloud.password",
+        "micloud.country",
+        "micloud.forceMiCloud",
+        "micloud.timeout"
+      ]
+    },
+    {
+      "key": "devices",
+      "type": "tabarray",
+      "title": "{{ value.name || 'new device' }}",
+      "items": [
+        "devices[].name",
+        "devices[].ip",
+        "devices[].token",
+        "devices[].deviceId",
+        {
+          "key": "devices[]",
+          "type": "fieldset",
+          "title": "{{ value.title }}",
+          "items": [{
+              "type": "fieldset",
+              "title": "Advanced Settings",
+              "description": "Configure advanced plugin settings.",
+              "expandable": true,
+              "expanded": false,
+              "items": [
+                "devices[].model",
+                "devices[].prefsDir",
+                "devices[].pollingInterval",
+                "devices[].propertyChunkSize",
+                "devices[].deepDebugLog",
+                "devices[].silentLog"
+              ]
+            },
+            {
+              "type": "fieldset",
+              "title": "MiCloud Settings",
+              "description": "Configure MiCloud connection details for this device.",
+              "expandable": true,
+              "expanded": false,
+              "items": [
+                "devices[].micloud.username",
+                "devices[].micloud.password",
+                "devices[].micloud.country",
+                "devices[].micloud.forceMiCloud",
+                "devices[].micloud.timeout"
+              ]
+            },
+            {
+              "type": "fieldset",
+              "title": "General device settings",
+              "description": "Configure general device settings.",
+              "expandable": true,
+              "expanded": false,
+              "items": [
+                "devices[].customAccessory",
+                "devices[].onlyMainService",
+                "devices[].ledControl",
+                "devices[].buzzerControl",
+                "devices[].childLockControl",
+                "devices[].modeControl",
+                "devices[].suppressAutoServiceCreation",
+                {
+                  "key": "devices[].actionButtons",
+                  "description": "Configure action buttons. For details check README.",
+                  "buttonText": "Add action button",
+                  "type": "fieldset",
+                  "expandable": true,
+                  "expanded": false,
+                  "items": [
+                    "devices[].actionButtons[].action",
+                    "devices[].actionButtons[].name",
+                    {
+                      "key": "devices[].actionButtons[].params",
+                      "type": "array",
+                      "buttonText": "Add param",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "key": "devices[].methodButtons",
+                  "description": "Configure method buttons. For details check README.",
+                  "buttonText": "Add method button",
+                  "type": "fieldset",
+                  "expandable": true,
+                  "expanded": false,
+                  "items": [
+                    "devices[].methodButtons[].method",
+                    "devices[].methodButtons[].name",
+                    {
+                      "key": "devices[].methodButtons[].params",
+                      "type": "array",
+                      "buttonText": "Add param",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "key": "devices[].propertyControl",
+                  "description": "Configure property control. For details check README.",
+                  "buttonText": "Add property control",
+                  "type": "fieldset",
+                  "expandable": true,
+                  "expanded": false,
+                  "items": [
+                    "devices[].propertyControl[].property",
+                    "devices[].propertyControl[].name",
+                    "devices[].propertyControl[].value",
+                    "devices[].propertyControl[].linkedProperty",
+                    "devices[].propertyControl[].linkedPropertyValue",
+                    "devices[].propertyControl[].config"
+                  ]
+                },
+                {
+                  "key": "devices[].propertyMonitor",
+                  "description": "Configure property monitor. For details check README.",
+                  "buttonText": "Add property monitor",
+                  "type": "fieldset",
+                  "expandable": true,
+                  "expanded": false,
+                  "items": [
+                    "devices[].propertyMonitor[].property",
+                    "devices[].propertyMonitor[].name",
+                    "devices[].propertyMonitor[].value",
+                    "devices[].propertyMonitor[].valueOperator",
+                    "devices[].propertyMonitor[].linkedProperty",
+                    "devices[].propertyMonitor[].linkedPropertyValue"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "fieldset",
+              "title": "Fan specific settings",
+              "description": "Configure fan specific device settings.",
+              "expandable": true,
+              "expanded": false,
+              "items": [
+                "devices[].swingControl",
+                "devices[].moveControl",
+                "devices[].fanLevelControl",
+                "devices[].ioniserControl",
+                "devices[].offDelayControl",
+                {
+                  "key": "devices[].horizontalAngleButtons",
+                  "type": "array",
+                  "items": {
+                    "title": "Angle",
+                    "type": "integer"
+                  }
+                },
+                {
+                  "key": "devices[].verticalAngleButtons",
+                  "type": "array",
+                  "items": {
+                    "title": "Angle",
+                    "type": "integer"
+                  }
+                }
+              ],
+              "condition": {
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(zhimi|dmaker|air)\\.fan\\.([^.]+)$/);"
+              }
+            },
+            {
+              "type": "fieldset",
+              "title": "Ceiling Fan specific settings",
+              "description": "Configure ceiling fan specific device settings.",
+              "expandable": true,
+              "expanded": false,
+              "items": [
+                "devices[].fanLevelControl",
+                "devices[].offDelayControl"
+              ],
+              "condition": {
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(opple|yeelink)\\.light\\.(fan|fanlight)([^.]+)$/);"
+              }
+            },
+            {
+              "type": "fieldset",
+              "title": "Heater specific settings",
+              "description": "Configure heater specific device settings.",
+              "expandable": true,
+              "expanded": false,
+              "items": [
+                "devices[].offDelayControl"
+              ],
+              "condition": {
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(zhimi|leshow|isleep)\\.(heater|blanket)\\.([^.]+)$/);"
+              }
+            },
+            {
+              "type": "fieldset",
+              "title": "Humidifier specific settings",
+              "description": "Configure humidifier specific device settings.",
+              "expandable": true,
+              "expanded": false,
+              "items": [
+                "devices[].screenControl",
+                "devices[].fanLevelControl"
+              ],
+              "condition": {
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(zhimi|deerma|leshow)\\.humidifier\\.([^.]+)$/);"
+              }
+            },
+            {
+              "type": "fieldset",
+              "title": "Dehumidifier specific settings",
+              "description": "Configure dehumidifier specific device settings.",
+              "expandable": true,
+              "expanded": false,
+              "items": [
+                "devices[].fanLevelControl"
+              ],
+              "condition": {
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^nwt\\.derh\\.([^.]+)$/);"
+              }
+            },
+            {
+              "type": "fieldset",
+              "title": "Air Purifier specific settings",
+              "description": "Configure air purifier specific device settings.",
+              "expandable": true,
+              "expanded": false,
+              "items": [
+                "devices[].screenControl",
+                "devices[].fanLevelControl",
+                "devices[].ioniserControl",
+                {
+                  "key": "devices[].pm25Breakpoints",
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "maxItems": 4,
+                    "uniqueItems": true
+                  }
+                }
+              ],
+              "condition": {
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(hanyi|zhimi)\\.(airpurifier|airp)\\.([^.]+)$/);"
+              }
+            },
+            {
+              "type": "fieldset",
+              "title": "Curtain specific settings",
+              "description": "Configure curtain specific device settings.",
+              "expandable": true,
+              "expanded": false,
+              "items": [
+                "devices[].motorControl"
+              ],
+              "condition": {
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(dooya|leshi|lumi)\\.curtain\\.([^.]+)$/);"
+              }
+            },
+            {
+              "type": "fieldset",
+              "title": "Fresh Air System specific settings",
+              "description": "Configure fresh air system specific device settings.",
+              "expandable": true,
+              "expanded": false,
+              "items": [
+                "devices[].fanLevelControl",
+                "devices[].heaterControl",
+                "devices[].heatLevelControl",
+                {
+                  "key": "devices[].pm25Breakpoints",
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "maxItems": 4,
+                    "uniqueItems": true
+                  }
+                },
+                "devices[].co2AbnormalThreshold"
+              ],
+              "condition": {
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(dmaker|zhimi)\\.airfresh\\.([^.]+)$/);"
+              }
+            },
+            {
+              "type": "fieldset",
+              "title": "Outlet specific settings",
+              "description": "Configure outlet specific device settings.",
+              "expandable": true,
+              "expanded": false,
+              "items": [
+                "devices[].offDelayControl",
+                "devices[].showTemperature"
+              ],
+              "condition": {
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(chuangmi|cuco|zimi|qmi)\\.(plug|powerstrip)\\.([^.]+)$/);"
+              }
+            },
+            {
+              "type": "fieldset",
+              "title": "Air Conditioner specific settings",
+              "description": "Configure air conditioner specific device settings.",
+              "expandable": true,
+              "expanded": false,
+              "items": [
+                "devices[].swingControl",
+                "devices[].fanLevelControl"
+              ],
+              "condition": {
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^lumi\\.(acpartner|aircondition)\\.([^.]+)$/);"
+              }
+            },
+            {
+              "type": "fieldset",
+              "title": "Airer specific settings",
+              "description": "Configure airer specific device settings.",
+              "expandable": true,
+              "expanded": false,
+              "items": [
+                "devices[].motorControl"
+              ],
+              "condition": {
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^hyd\\.airer\\.([^.]+)$/);"
+              }
+            },
+            {
+              "type": "fieldset",
+              "title": "Air Monitor specific settings",
+              "description": "Configure air monitor specific device settings.",
+              "expandable": true,
+              "expanded": false,
+              "items": [{
+                  "key": "devices[].pm25Breakpoints",
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "maxItems": 4,
+                    "uniqueItems": true
+                  }
+                },
+                "devices[].co2AbnormalThreshold"
+              ],
+              "condition": {
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model || device.model.match(/^(cgllc|zhimi)\\.(airm|airmonitor)\\.([^.]+)$/);"
+              }
+            },
+            {
+              "type": "fieldset",
+              "title": "Pet Feeder specific settings",
+              "description": "Configure pet feeder specific device settings.",
+              "expandable": true,
+              "expanded": false,
+              "items": [
+                "devices[].foodAmount"
+              ],
+              "condition": {
+                "functionBody": "var device = model.devices[arrayIndices]; return !device.model ||  device.model.match(/^([^.]+).feeder.([^.]+)$/);"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

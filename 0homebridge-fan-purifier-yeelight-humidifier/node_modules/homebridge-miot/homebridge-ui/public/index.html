@@ -1,0 +1,513 @@
+<script crossorigin="anonymous" src="js/jquery.slim.js"></script>
+<script crossorigin="anonymous" src="js/popper.js"></script>
+<script crossorigin="anonymous" src="js/bootstrap.js"></script>
+
+<div id="accordion">
+  <div class="card">
+
+    <div class="card-header" id="headingOne">
+      <h5 class="mb-0 text-center">
+        <button aria-controls="collapseOne" aria-expanded="true" class="btn btn-deep-orange" data-target="#collapseOne" data-toggle="collapse">
+          Discover all devices via MiCloud
+        </button>
+        <button aria-controls="deviceClassGeneratorSection" aria-expanded="true" class="btn btn-deep-purple" data-target="#deviceClassGeneratorSection" data-toggle="collapse">
+          Generate device class
+        </button>
+        <button aria-controls="deviceMetadataSection" aria-expanded="true" class="btn btn-blue-grey" data-target="#deviceMetadataSection" data-toggle="collapse">
+          Fetch device metadata
+        </button>
+      </h5>
+    </div>
+
+    <!-- MICLOUD DEVICE FETCHER -->
+
+    <div aria-labelledby="headingOne" class="collapse" data-parent="#accordion" id="collapseOne">
+      <div class="card-body">
+        <form>
+          <div class="form-row">
+            <div class="col">
+              <label for="userNameInput">Username</label>
+              <input class="form-control" id="usernameInput" required type="text">
+              <small id="userNameHelp" class="form-text text-muted">UserId/Email/Phone</small>
+            </div>
+            <div class="col">
+              <label for="passwordInput">Password</label>
+              <input class="form-control" id="passwordInput" required type="password">
+            </div>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" checked class="form-check-input" id="autoAddToHomebridgeCheckbox">
+            <label class="form-check-label" for="autoAddToHomebridgeCheckbox">Automatically add to homebridge?</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="showAllDevicesCheckbox">
+            <label class="form-check-label" for="showAllDevicesCheckbox">Show all devices?</label>
+          </div>
+          <div class="text-center">
+            <button class="btn btn-primary btn-login" id="getAllDevices" type="button">Discover All Devices</button>
+          </div>
+          <div class="text-center two-factor-url miot-message" style="display: none">
+            <a id="twoFactorAuth" class="btn btn-danger" href="#" target="_blank" style="color:#fff;">2FA required, click here, wait a few seconds and try again!</a>
+          </div>
+          <div class="text-center device-table miot-message" style="display: none">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Model</th>
+                  <th scope="col">Token</th>
+                  <th scope="col">Device Id</th>
+                  <th scope="col">Local Ip</th>
+                  <th scope="col">Country</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>No devices found!</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+    <!-- DEVICE CLASS GENERATOR -->
+
+    <div aria-labelledby="deviceClassGenerator" class="collapse" data-parent="#accordion" id="deviceClassGeneratorSection">
+      <div class="card-body">
+        <form>
+          <div class="form-group">
+            <label for="deviceModelInput">Model</label>
+            <input class="form-control" id="deviceModelInput" required type="text">
+            <small id="deviceModelHelp" class="form-text text-muted">The unique model of your device, e.g. zhimi.fan.za5</small>
+          </div>
+          <div class="form-group">
+            <label for="deviceNameInput">Device name</label>
+            <input class="form-control" id="deviceNameInput" type="text">
+            <small id="deviceNameHelp" class="form-text text-muted">The friendly name of the device used by the manufacturer, e.g. Smartmi Standing Fan 3</small>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="requiresMiCloudCheckbox">
+            <label class="form-check-label" for="requiresMiCloudCheckbox">Requires MiCloud?</label>
+          </div>
+          <div class="text-center">
+            <button class="btn btn-primary" id="generateDeviceClass" type="button">Generate</button>
+          </div>
+        </form>
+        <div class="text-center device-class-generated miot-message" style="display: none">
+          <div class="alert alert-success" role="alert">
+            Device class successfully generated!
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEVICE METADATA -->
+
+    <div aria-labelledby="deviceMetadata" class="collapse" data-parent="#accordion" id="deviceMetadataSection">
+      <div class="card-body">
+        <form>
+          <div class="form-group">
+            <label for="deviceModelInputMetadata">Model</label>
+            <input class="form-control" id="deviceModelInputMetadata" required type="text">
+            <small id="deviceModelHelp" class="form-text text-muted">The unique model of your device, e.g. zhimi.fan.za5</small>
+          </div>
+          <div class="text-center">
+            <button class="btn btn-primary" id="getDeviceMetadata" type="button">Fetch metadata</button>
+          </div>
+        </form>
+
+        <div class="metadata-table miot-message mt-3" style="display: none">
+
+          <ul class="nav nav-pills" id="metadataTab">
+            <li class="nav-item">
+              <a class="nav-link tab-properties active disabled" data-toggle="tab" role="tab" aria-controls="properties" href="#properties">Properties</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link tab-actions disabled" data-toggle="tab" role="tab" aria-controls="actions" href="#actions">Actions</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link tab-events disabled" data-toggle="tab" role="tab" aria-controls="events" href="#events">Events</a>
+            </li>
+          </ul>
+
+          <div id="metadataTabContent" class="tab-content">
+            <div class="tab-pane fade active show" id="properties">
+
+              <div class="metadata-table-properties">
+                <table class="table table-sm align-middle">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col" style="width:15%">Name</th>
+                      <th scope="col">Id</th>
+                      <th scope="col" style="width:15%">Description</th>
+                      <th scope="col">Format</th>
+                      <th scope="col">Access</th>
+                      <th scope="col">Unit</th>
+                      <th scope="col">Value Range</th>
+                      <th scope="col" style="width:20%">Value List</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+            <div class="tab-pane fade" id="actions">
+
+              <div class="metadata-table-actions">
+                <table class="table table-sm align-middle">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Id</th>
+                      <th scope="col" style="width:15%">Description</th>
+                      <th scope="col">In (piid)</th>
+                      <th scope="col">Out (piid)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+            <div class="tab-pane fade" id="events">
+
+              <div class="metadata-table-events">
+                <table class="table table-sm align-middle">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Id</th>
+                      <th scope="col" style="width:15%">Description</th>
+                      <th scope="col">Arguments</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<script>
+  const homebridge = window.homebridge;
+  const $ = jQuery = window.jQuery;
+
+  (async () => {
+    homebridge.showSpinner();
+
+    // get the initial config - this is an array potentially containing multiple config blocks
+    const pluginConfig = await homebridge.getPluginConfig();
+    const configSchema = await homebridge.getPluginConfigSchema();
+
+    if (!pluginConfig.length) {
+      pluginConfig.push({});
+    }
+    const configuration = pluginConfig[0];
+    configuration.devices = configuration.devices || [];
+
+    function createForm(configSchema, configuration) {
+      const configForm = homebridge.createForm(configSchema, configuration);
+      configForm.onChange(async (changes) => {
+        await homebridge.updatePluginConfig([changes]);
+      })
+    }
+
+    // cloud devices helper
+    function showDeviceTable(devices) {
+      $('.device-table table tbody').empty();
+      if (devices) {
+        devices.forEach(function(device) {
+          let tableEntry = `<tr><th scope="row">${device.name}</th><td>${device.model}</td><td>${device.token}</td><td>${device.deviceId}</td><td>${device.ip}</td></td><td>${device.country}</td></tr>`
+          $('.device-table table tbody').append(tableEntry);
+        });
+      } else {
+        $('.device-table table tbody').append(`<tr><td>No devices found!</td></tr>`);
+      }
+      $('.device-table').show();
+    }
+
+    // metadata table helper
+    function showMetadataTable(metadata) {
+      $('.metadata-table .metadata-table-properties table tbody').empty();
+      $('.metadata-table .metadata-table-actions table tbody').empty();
+      $('.metadata-table .metadata-table-events table tbody').empty();
+      $('.metadata-table a.nav-link.tab-properties').addClass('disabled');
+      $('.metadata-table a.nav-link.tab-actions').addClass('disabled');
+      $('.metadata-table a.nav-link.tab-events').addClass('disabled');
+
+      if (metadata) {
+        $('.metadata-table').show();
+
+        //  showMetdataDeviceType(metadata);
+        //  showSpecUrl(metadata);
+
+        if (metadata.properties && Object.keys(metadata.properties).length > 0) {
+          renderProperties(metadata.properties);
+          $('.metadata-table a.nav-link.tab-properties').removeClass('disabled');
+          $('.metadata-table a.nav-link.tab-properties').tab('show');
+        }
+
+        if (metadata.actions && Object.keys(metadata.actions).length > 0) {
+          renderActions(metadata.actions);
+          $('.metadata-table  a.nav-link.tab-actions').removeClass('disabled');
+        }
+
+        if (metadata.events && Object.keys(metadata.events).length > 0) {
+          renderEvents(metadata.events);
+          $('.metadata-table  a.nav-link.tab-events').removeClass('disabled');
+        }
+
+      } else {
+        homebridge.toast.error('Could not retrieve device metadata...', 'Error');
+      }
+    }
+
+    function renderProperties(properties) {
+      Object.keys(properties).forEach(propKey => {
+        const prop = properties[propKey];
+        let accessStr = null;
+        if (prop.access) {
+          accessStr = '';
+          prop.access.forEach((value) => {
+            accessStr = accessStr + getAccessStr(value);
+          })
+        }
+        let valRangeStr = null;
+        if (prop.valueRange && prop.valueRange.length === 3) {
+          valRangeStr = `Min: ${prop.valueRange[0]}</br>Max: ${prop.valueRange[1]}</br>Step: ${prop.valueRange[2]}</br>`;
+        }
+        let valListStr = null;
+        if (prop.valueList) {
+          valListStr = '';
+          prop.valueList.forEach((value, key) => {
+            valListStr = valListStr + `${value.value} - ${value.description}</br>`;
+          })
+        }
+        let tableEntry =
+          `<tr><th scope="row">${formatName(prop.name)}</th><td>${formatId(prop.siid,prop.piid)}</td><td>${prop.description}</td><td>${prop.format || ' - '}</td><td>${accessStr || ' - '}</td><td>${prop.unit || ' - '}</td><td>${valRangeStr || ' - '}</td><td>${valListStr || ' - '}</td></tr>`
+        $('.metadata-table .metadata-table-properties table tbody').append(tableEntry);
+
+      });
+    }
+
+    function renderActions(actions) {
+      Object.keys(actions).forEach(actionKey => {
+        const action = actions[actionKey];
+        let tableEntry = `<tr><th scope="row">${formatName(action.name)}</th><td>${formatId(action.siid,action.aiid)}</td><td>${action.description}</td><td>${getArrayValues(action.in)}</td><td>${getArrayValues(action.out)}</td></tr>`
+        $('.metadata-table .metadata-table-actions table tbody').append(tableEntry);
+      });
+    }
+
+    function renderEvents(events) {
+      Object.keys(events).forEach(eventKey => {
+        const miotEvent = events[eventKey];
+        let tableEntry = `<tr><th scope="row">${formatName(miotEvent.name)}</th><td>${formatId(miotEvent.siid,miotEvent.eiid)}</td>><td>${miotEvent.description}</td><td>${getArrayValues(miotEvent.arguments)}</td></tr>`
+        $('.metadata-table .metadata-table-events table tbody').append(tableEntry);
+      });
+    }
+
+    function formatName(name) {
+      return `<h7><span class="badge bg-dark">${name}</span><h7>`
+    }
+
+    function formatId(siid, id) {
+      return `<h6><span class="badge bg-info">${siid}.${id}</span><h6>`
+    }
+
+    function getAccessStr(str) {
+      if (str === 'read') {
+        return '<span class="badge rounded-pill bg-success">read</span>'
+      } else if (str === 'write') {
+        return '<span class="badge rounded-pill bg-primary">write</span>'
+      } else {
+        return '<span class="badge rounded-pill bg-secondary">notify</span>'
+      }
+    }
+
+    function getArrayValues(valArray) {
+      if (valArray && valArray.length > 0) {
+        return valArray;
+      }
+      return ' - ';
+    }
+
+    // get all cloud devices
+    $('#getAllDevices').on('click', function(e) {
+      e.preventDefault();
+      var btn = $(this),
+        usernameInput = $('#usernameInput'),
+        passwordInput = $('#passwordInput'),
+        autoAddToHomebridgeCheckbox = $('#autoAddToHomebridgeCheckbox'),
+        showAllDevicesCheckbox = $('#showAllDevicesCheckbox');
+
+      let username = usernameInput.val();
+      let password = passwordInput.val();
+      let isAutoAddToHomebridge = autoAddToHomebridgeCheckbox.is(":checked");
+      let isShowAll = showAllDevicesCheckbox.is(":checked");
+
+      if (username && password) {
+        $('.miot-message').hide();
+        btn.prop('disabled', true).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
+        usernameInput.prop('disabled', true);
+        passwordInput.prop('disabled', true);
+        autoAddToHomebridgeCheckbox.prop('disabled', true);
+        showAllDevicesCheckbox.prop('disabled', true);
+
+        homebridge.request('/get-all-devices', {
+          username,
+          password,
+          isShowAll
+        }).then(async data => {
+          if (data.success && data.devices && data.devices.length > 0) {
+            // create the device table
+            showDeviceTable(data.devices);
+            // add devices to homebridge
+            if (isAutoAddToHomebridge) {
+              // only add device which have ip and deviceid does not start with 'blt.', prevent of automatically adding bluetooth device if show all enabled
+              let filteredDevices = data.devices.filter(device => device.ip && device.ip.length > 0 && !device.deviceId.includes("blt."));
+              // add new devices to exists devices list, prevent duplicate by device ip
+              filteredDevices = filteredDevices.filter(device => !configuration.devices.find(d => d.ip === device.ip));
+              configuration.devices.push(...filteredDevices);
+              await homebridge.updatePluginConfig([configuration]);
+              createForm(configSchema, configuration);
+              homebridge.toast.success('Added ' + filteredDevices.length + ' new devices. Save and restart Homebridge to apply changes.');
+            }
+          } else if (data.success && (!data.devices || data.devices.length === 0)) {
+            homebridge.toast.warning('No devices found on your account.');
+          } else if (!data.success && data.url) {
+            homebridge.toast.error(data.error, 'Login Error');
+            $('.two-factor-url a').attr('href', data.url);
+            $('.two-factor-url').show();
+          } else if ((typeof data.success === 'undefined' || data.success === false) && data.error) {
+            homebridge.toast.error(data.error, 'Login Error');
+          } else {
+            homebridge.toast.error('Could not login due to an unknown error.', 'Unknown Error');
+          }
+
+          if (data.warning) {
+            homebridge.toast.warning(data.warning);
+          }
+
+          btn.prop('disabled', false).html("Discover all devices via MiCloud");
+          usernameInput.prop('disabled', false);
+          passwordInput.prop('disabled', false);
+          autoAddToHomebridgeCheckbox.prop('disabled', false);
+          showAllDevicesCheckbox.prop('disabled', false);
+        })
+      } else {
+        homebridge.toast.error('A username and password must be provided.', 'Error');
+      }
+    });
+
+    // generate device class
+    $('#generateDeviceClass').on('click', function(e) {
+      e.preventDefault();
+      let btn = $(this),
+        modelInput = $('#deviceModelInput'),
+        nameInput = $('#deviceNameInput'),
+        requiresMiCloudCheckbox = $('#requiresMiCloudCheckbox');
+
+      let deviceModel = modelInput.val();
+      let deviceName = nameInput.val();
+      let isMiCloudRequired = requiresMiCloudCheckbox.is(":checked");
+
+      if (deviceModel) {
+        let regex = /(\..*){2,}/;
+        let valid = regex.test(deviceModel);
+        if (valid) {
+          $('.miot-message').hide();
+          btn.prop('disabled', true).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
+          modelInput.prop('disabled', true);
+          nameInput.prop('disabled', true);
+          requiresMiCloudCheckbox.prop('disabled', true);
+
+          homebridge.request('/generate-device-class', {
+            deviceModel,
+            deviceName,
+            isMiCloudRequired
+          }).then(async data => {
+            if (typeof data.success === 'undefined' || data.success === false) {
+              homebridge.toast.error('Generate failed! Error: ' + data.error, 'Error');
+            } else if (data.success && data.filePath) {
+              //  createForm(configSchema, configuration);
+              let sucMsg =
+                `It is a ${data.devType} device! Created device class at <b> ${data.filePath} </b> <br> Please move the generated file to lib/modules/${data.devType.toLowerCase()}/devices/ and consider creating a pull request at github!`;
+              if (data.devType === 'Generic') {
+                sucMsg = `Could not identify device! Created device class at <b> ${data.filePath} </b> <br> Manual device class adjustment is required!`;
+              }
+              $('.device-class-generated .alert').html(sucMsg);
+              $('.device-class-generated').show();
+              homebridge.toast.success('Device class generated!');
+            }
+            btn.prop('disabled', false).html("Generate");
+            modelInput.prop('disabled', false);
+            nameInput.prop('disabled', false);
+            requiresMiCloudCheckbox.prop('disabled', false);
+          })
+        } else {
+          homebridge.toast.error('The specified model is in a incorrect format', 'Error');
+        }
+      } else {
+        homebridge.toast.error('Please provide a device model', 'Error');
+      }
+    });
+
+    // get device metadata
+    $('#getDeviceMetadata').on('click', function(e) {
+      e.preventDefault();
+      let btn = $(this),
+        modelInput = $('#deviceModelInputMetadata');
+
+      let deviceModel = modelInput.val();
+
+      if (deviceModel) {
+        let regex = /(\..*){2,}/;
+        let valid = regex.test(deviceModel);
+        if (valid) {
+          $('.miot-message').hide();
+          btn.prop('disabled', true).html('<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>');
+          modelInput.prop('disabled', true);
+
+          homebridge.request('/get-device-metadata', {
+            deviceModel
+          }).then(async data => {
+            if (typeof data.success === 'undefined' || data.success === false) {
+              homebridge.toast.error('Failed to get device metadata! Error: ' + data.error, 'Error');
+            } else if (data.success && data.metadata) {
+              //    createForm(configSchema, configuration);
+              // create the metadata table
+              showMetadataTable(data.metadata);
+              homebridge.toast.success(`Got metada for a ${data.metadata.description} device!`);
+            }
+            btn.prop('disabled', false).html("Fetch metadata");
+            modelInput.prop('disabled', false);
+          })
+        } else {
+          homebridge.toast.error('The specified model is in a incorrect format', 'Error');
+        }
+      } else {
+        homebridge.toast.error('Please provide a device model', 'Error');
+      }
+    });
+
+    createForm(configSchema, configuration);
+
+    homebridge.hideSpinner();
+  })();
+</script>
