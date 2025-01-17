@@ -22,7 +22,7 @@ Under preparation...
 
 ## Start LLM backend
 
-./llamafile-server-0.2.1 -m weight/Meta-Llama-3.2-8B-Instruct.Q8_0.gguf
+./llamafile-server-0.2.1 -m weight/Meta-Llama-3-8B-Instruct.Q8_0.gguf
 
 ### Requirements
 
