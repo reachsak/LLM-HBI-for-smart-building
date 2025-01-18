@@ -8,8 +8,8 @@ This project involves designing and implementing a large language model-based ch
 *Click on the image to view the demo video.*
 
 ## Summary
-<img src="/fig1.png" style="float: left; margin-right: 20px; max-width: 200px;">
 <img src="/fig2.png" style="float: left; margin-right: 20px; max-width: 200px;">
+<img src="/fig1.png" style="float: left; margin-right: 20px; max-width: 200px;">
 <img src="/equipment.png" style="float: left; margin-right: 20px; max-width: 200px;">
 ## Video Demo
 
