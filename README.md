@@ -23,5 +23,5 @@ The Project aims to facilitate the human-building interaction within smart build
 - Open-source Text-to-Speech (TTS) model, Whisper
 - Open-source Speech-to-Text (STT) model, Piper
 
-
-
+## Detailed setup guide
+Coming soon.....
