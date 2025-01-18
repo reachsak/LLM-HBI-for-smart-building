@@ -1,17 +1,19 @@
 # Large Language Model for Human-Building Interaction
 
+## Project Overview
 
-## Summary
-<img src="/fig1.png" style="float: left; margin-right: 20px; max-width: 200px;">
-
-## Video Demo
+This project involves designing and implementing a large language model-based chatbot to facilitate interactions between building occupants and facility management systems. The goal is to enhance smart facilities control through natural language interface with the use open-source Large language model, Text-to-Speech (TTS) and Speech-to-Text (STT) models.
 
 [![Watch the demo video](https://img.youtube.com/vi/0SyZHvmadZA/0.jpg)](https://www.youtube.com/watch?v=0SyZHvmadZA)  
 *Click on the image to view the demo video.*
 
-## Project Overview
+## Summary
+<img src="/fig2.png" style="float: left; margin-right: 20px; max-width: 200px;">
+<img src="/fig1.png" style="float: left; margin-right: 20px; max-width: 200px;">
+<img src="/equipment.png" style="float: left; margin-right: 20px; max-width: 200px;">
+## Video Demo
 
-This project involves designing and implementing a large language model-based chatbot to facilitate interactions between building occupants and facility management systems. The goal is to enhance smart facilities control through natural language interface with the use open-source Large language model, Text-to-Speech (TTS) and Speech-to-Text (STT) models.
+
 
 ## Manuscript
 Under preparation...
@@ -22,6 +24,12 @@ Under preparation...
 - **Large Language Model-Based Chatbot:** Enables natural language interactions with building management systems.
 - **Smart Facilities Control:** Integrates with smart building systems to provide efficient control and management through conversational interfaces.
 - **Open-Source TTS and STT Models:** Utilizes open-source Text-to-Speech and Speech-to-Text models for seamless voice communication.
+
+
+
+## Manuscript
+Under preparation...
+
 
 ## Start LLM backend
 
