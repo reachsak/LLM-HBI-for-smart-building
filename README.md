@@ -2,7 +2,7 @@
 
 
 ## Summary
-<img src="/fig1.jpg" style="float: left; margin-right: 20px; max-width: 200px;">
+<img src="/fig1.png" style="float: left; margin-right: 20px; max-width: 200px;">
 
 ## Video Demo
 
