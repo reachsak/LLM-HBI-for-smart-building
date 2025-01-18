@@ -4,15 +4,14 @@
 
 This project involves designing and implementing a large language model-based chatbot to facilitate interactions between building occupants and facility management systems. The goal is to enhance smart facilities control through natural language interface with the use open-source Large language model, Text-to-Speech (TTS) and Speech-to-Text (STT) models.
 
-[![Watch the demo video](https://img.youtube.com/vi/0SyZHvmadZA/0.jpg)](https://www.youtube.com/watch?v=0SyZHvmadZA)  
-*Click on the image to view the demo video.*
-
 ## Summary
 <img src="/fig2.png" style="float: left; margin-right: 20px; max-width: 200px;">
 <img src="/fig1.png" style="float: left; margin-right: 20px; max-width: 200px;">
 <img src="/equipment.png" style="float: left; margin-right: 20px; max-width: 200px;">
-## Video Demo
 
+## Video Demo
+[![Watch the demo video](https://img.youtube.com/vi/0SyZHvmadZA/0.jpg)](https://www.youtube.com/watch?v=0SyZHvmadZA)  
+*Click on the image to view the demo video.*
 
 
 ## Manuscript
