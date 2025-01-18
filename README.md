@@ -1,6 +1,9 @@
 # Large Language Model for Human-Building Interaction
 
 
+## Summary
+<img src="/fig1.jpg" style="float: left; margin-right: 20px; max-width: 200px;">
+
 ## Video Demo
 
 [![Watch the demo video](https://img.youtube.com/vi/0SyZHvmadZA/0.jpg)](https://www.youtube.com/watch?v=0SyZHvmadZA)  
